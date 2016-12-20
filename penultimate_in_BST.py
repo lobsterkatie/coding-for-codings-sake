@@ -55,40 +55,25 @@ class BST(object):
             prev_node.right_kid = new_node
 
 
-    def print_tree(self, node=None, indent=None, direction=None):
+    def print_tree(self, node=None, level=0):
         """Prints out the tree, using indenting to indicate levels"""
 
         if not node:
             node = self.root
 
-        if not indent:
-            indent = 3
-
-        # if direction == "L":
-        #     indent -= 2
-        # elif direction == "R":
-        #     indent = 2 * level
-        # else:
-        #     indent = 3
-        print " " * indent + str(node.data)
-
-        #     print " " * (level * 2) + str(node.data)
-        # else:
-        #     print "   " + str(node.data)
+        print node.data
 
         if node.left_kid:
-            print " " * (indent - 1) + "/"
-            self.print_tree(node.left_kid, indent - 2, "L")
+            print "  " * (level + 1) + "L:",
+            self.print_tree(node.left_kid, level + 1)
         # else:
         #     print None
 
         if node.right_kid:
-            print " " * (indent + 1) + "\\"
-            self.print_tree(node.right_kid, indent + 2, "R")
+            print "  " * (level + 1) + "R:",
+            self.print_tree(node.right_kid, level + 1)
         # else:
         #     print None
-
-        print
 
 
 a = Node("a")
@@ -97,7 +82,6 @@ f = Node("f")
 d = Node("d")
 c = Node("c")
 e = Node("e")
-g = Node("g")
 
 
 tree = BST(d)
@@ -106,7 +90,6 @@ tree.insert_node(f)
 tree.insert_node(c)
 tree.insert_node(e)
 tree.insert_node(b)
-tree.insert_node(g)
 
 
 tree.print_tree()

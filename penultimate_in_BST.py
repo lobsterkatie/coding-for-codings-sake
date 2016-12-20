@@ -75,6 +75,27 @@ class BST(object):
         # else:
         #     print None
 
+    def search_for(self, target_data, node="root"):
+        """Walks the tree, looking for target_data; returns that data's Node if
+           found, None if not."""
+
+        if not node:
+            return None
+
+        if node == "root":
+            node = self.root
+
+        print "examining", node.data
+
+        if node.data == target_data:
+            print "found!"
+            return node
+        else:
+            return (self.search_for(target_data, node.left_kid) or
+                    self.search_for(target_data, node.right_kid))
+
+
+
 
 a = Node("a")
 b = Node("b")
@@ -82,6 +103,7 @@ f = Node("f")
 d = Node("d")
 c = Node("c")
 e = Node("e")
+g = Node("g")
 
 
 tree = BST(d)
@@ -90,6 +112,14 @@ tree.insert_node(f)
 tree.insert_node(c)
 tree.insert_node(e)
 tree.insert_node(b)
+tree.insert_node(g)
 
-
+print
 tree.print_tree()
+
+
+print
+tree.search_for("e")
+
+print
+tree.search_for("h")

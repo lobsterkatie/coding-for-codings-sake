@@ -18,6 +18,8 @@ class BST(object):
     def insert_node(self, new_node):
         """Inserts the given node in the appropriate place."""
 
+        print "inserting", new_node.data
+
         #if the tree is empty, the make the node to be inserted its root
         if not self.root:
             self.root = new_node
@@ -51,3 +53,43 @@ class BST(object):
             prev_node.left_kid = new_node
         elif direction == "R":
             prev_node.right_kid = new_node
+
+
+    def print_tree(self, node=None, level=0):
+        """Prints out the tree, using indenting to indicate levels"""
+
+        if not node:
+            node = self.root
+
+        print "  " * level + str(node.data)
+
+        if node.left_kid:
+            print "  " * (level + 1) + "/"
+            self.print_tree(node.left_kid, level + 1)
+        # else:
+        #     print None
+
+        if node.right_kid:
+            print "  " * (level + 1) + "\\"
+            self.print_tree(node.right_kid, level + 1)
+        # else:
+        #     print None
+
+
+a = Node("a")
+b = Node("b")
+f = Node("f")
+d = Node("d")
+c = Node("c")
+e = Node("e")
+
+
+tree = BST(d)
+tree.insert_node(a)
+tree.insert_node(f)
+tree.insert_node(c)
+tree.insert_node(e)
+tree.insert_node(b)
+
+
+tree.print_tree()

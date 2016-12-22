@@ -95,6 +95,23 @@ class BST(object):
                     self.search_for(target_data, node.right_kid))
 
 
+#TODO - it's not this simple
+    def penultimate(self):
+        """Returns the second-highest node in the tree."""
+
+        if not self.root:
+            return None
+
+        current_node = self.root
+        prev_node = two_before = None
+
+
+        while current_node:
+            two_before = prev_node
+            prev_node = current_node
+            current_node = current_node.right_kid
+
+        return two_before
 
 
 a = Node("a")

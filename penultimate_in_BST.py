@@ -4,10 +4,17 @@ class Node(object):
         self.data = data
         self.left_kid = None
         self.right_kid = None
+        self.parent = None
 
     def __repr__(self):
         """Returns useful output when printing."""
         return "<Node {data}>".format(data=self.data)
+
+    def is_leaf(self):
+        """Returns True if the given node is a leaf (childless), False
+           otherwise."""
+
+        return not self.left_kid and not self.right_kid
 
 
 class BST(object):
@@ -56,6 +63,9 @@ class BST(object):
         elif direction == "R":
             prev_node.right_kid = new_node
 
+        #let the new node know who its parent is
+        new_node.parent = prev_node
+
 
     def print_tree(self, node=None, level=0):
         """Prints out the tree, using indenting to indicate levels"""
@@ -68,33 +78,40 @@ class BST(object):
         if node.left_kid:
             print "  " * (level + 1) + "L:",
             self.print_tree(node.left_kid, level + 1)
-        # else:
-        #     print None
 
         if node.right_kid:
             print "  " * (level + 1) + "R:",
             self.print_tree(node.right_kid, level + 1)
-        # else:
-        #     print None
+
 
     def search_for(self, target_data, node="root"):
-        """Walks the tree, looking for target_data; returns that data's Node if
+        """Walks the subtree rooted at the given node (or the entire tree if no
+           node is given), looking for target_data; returns that data's Node if
            found, None if not."""
 
+        #if the tree (or subtree) is empty, we clearly won't find the desired
+        #node
         if not node:
             return None
 
-        if node == "root":
-            node = self.root
-
-        print "examining", node.data
-
-        if node.data == target_data:
-            print "found!"
-            return node
+        #otherwise, start with the given node (or the tree's root, if no node
+        #is given)
+        if node != "root":
+            current_node = node
         else:
-            return (self.search_for(target_data, node.left_kid) or
-                    self.search_for(target_data, node.right_kid))
+            current_node = self.root
+
+        print "examining", current_node.data
+
+        #check the current node to see if it's the one we're looking for; if
+        #not, check the subtrees rooted at its two children
+        if current_node.data == target_data:
+            print "found!"
+            return current_node
+        else:
+            return (self.search_for(target_data, current_node.left_kid) or
+                    self.search_for(target_data, current_node.right_kid))
+
 
     def find_max(self, node=None):
         """Returns the highest node in the tree, or in the subtree rooted at
@@ -117,7 +134,7 @@ class BST(object):
         #current_node is now the non-existent right child of prev_node;
         #prev_node must be the max because if there were any nodes greater than
         #it, they'd be off to its right
-        #therefore, return prev_node
+        #therefore, return prev_node,
         return prev_node
 
 
@@ -131,6 +148,11 @@ class BST(object):
         if ((not self.root) or
             (not self.root.left_kid and not self.root.right_kid)):
             return None
+
+        #find the max node in the tree - the penultimate will either be its
+        #parent (if it's a leaf) or the max of its descendants (which will all
+        #be to the left; if it had right descendants, it wouldn't be the max)
+        max_in_tree = self.find_max()
 
 
 
@@ -226,4 +248,6 @@ print tree.search_for("h")
 print
 print tree.find_max()
 
-
+print
+print b.is_leaf()
+print a.is_leaf()

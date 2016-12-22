@@ -6,9 +6,12 @@ class Node(object):
         self.right_kid = None
         self.parent = None
 
+
     def __repr__(self):
         """Returns useful output when printing."""
+
         return "<Node {data}>".format(data=self.data)
+
 
     def is_leaf(self):
         """Returns True if the given node is a leaf (childless), False
@@ -23,6 +26,7 @@ class BST(object):
 
     def __init__(self, root=None):
         self.root = root
+
 
     def insert_node(self, new_node):
         """Inserts the given node in the appropriate place."""
@@ -70,11 +74,14 @@ class BST(object):
     def print_tree(self, node=None, level=0):
         """Prints out the tree, using indenting to indicate levels"""
 
+        #start with the given node (or the tree's root if no node is given)
         if not node:
             node = self.root
 
+        #print the node
         print node.data
 
+        #print each subtree (L and R) in turn
         if node.left_kid:
             print "  " * (level + 1) + "L:",
             self.print_tree(node.left_kid, level + 1)
@@ -138,9 +145,7 @@ class BST(object):
         return prev_node
 
 
-
-#TODO - it's not this simple
-    def penultimate(self):
+    def find_penultimate(self):
         """Returns the second-highest node in the tree."""
 
         #if the tree is empty or if there's only one node, there is no
@@ -154,59 +159,12 @@ class BST(object):
         #be to the left; if it had right descendants, it wouldn't be the max)
         max_in_tree = self.find_max()
 
+        if max_in_tree.is_leaf():
+            return max_in_tree.parent
+        else:
+            return self.find_max(max_in_tree.left_kid)
 
 
-
-        #go down to the right as far as possible
-        current_node = self.root
-        prev_node = two_before = None
-
-
-        while current_node:
-            two_before = prev_node
-            prev_node = current_node
-            current_node = current_node.right_kid
-
-        #at this point, current_node is off the right side of the
-        #bottom-right-most node of the current
-        #continuously-descending-to-the-right chain, prev_node is that
-        #bottom-right-most node, and two_before is prev_node's parent
-
-        #prev_node is now by definition pointing to the biggest node in the
-        #tree - if there were any nodes bigger, they'd be right descendants of
-        #it, and by getting here we know that it has no more right descendants
-
-        #there are now two possibilities: two_before
-
-        #a candidate for the max in the tree, making two_before
-        #a candidate for penultimate, and we know that prev_node doesn't have a
-        #right child, but it's possible that it has a left_child, who would be
-        #bigger than two_before but smaller than prev_node, making *it* a new
-        #candidate for penultimate... unless of course it has any right
-        #descendants, in which case one of them would be
-
-
-        # current_node = self.root
-        # prev_node = None
-
-        # while current_node:
-        #     current_node = current_node.right_kid
-
-
-
-
-        # current_node = self.root
-        # prev_node = two_before = None
-
-
-        # while current_node:
-        #     two_before = prev_node
-        #     prev_node = current_node
-        #     current_node = current_node.right_kid
-
-
-
-        # return two_before
 
 
 a = Node("a")
@@ -222,32 +180,42 @@ j = Node("j")
 k = Node("k")
 
 
-tree = BST(a)
-tree.insert_node(g)
-tree.insert_node(f)
-tree.insert_node(c)
-tree.insert_node(e)
-tree.insert_node(d)
-tree.insert_node(b)
-# tree.insert_node(h)
-# tree.insert_node(i)
-# tree.insert_node(j)
-# tree.insert_node(k)
+# tree = BST(a)
+# tree.insert_node(g)
+# tree.insert_node(b)
+# tree.insert_node(f)
+# tree.insert_node(c)
+# tree.insert_node(e)
+# tree.insert_node(d)
+# # tree.insert_node(h)
+# # tree.insert_node(i)
+# # tree.insert_node(j)
+# # tree.insert_node(k)
 
 
-print
-tree.print_tree()
+# print
+# tree.print_tree()
 
 
-print
-print tree.search_for("e")
+# print
+# print tree.search_for("e")
 
-print
-print tree.search_for("h")
+# print
+# print tree.search_for("h")
 
-print
-print tree.find_max()
+# print
+# print tree.find_max()
 
-print
-print b.is_leaf()
-print a.is_leaf()
+# print
+# print b.is_leaf()
+# print a.is_leaf()
+
+# print
+# print tree.find_penultimate()
+
+tree2 = BST(g)
+tree2.insert_node(a)
+print tree2.find_penultimate()
+
+tree3 = BST()
+print tree3.find_penultimate()
